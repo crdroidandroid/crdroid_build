@@ -1,0 +1,55 @@
+# crDroid build script #
+
+### Description ###
+
+This bash script is used to build crDroid and upload via FTP.
+With proper settings, it's also possible to push to crDroid AFH page automatically.
+
+### How to Install
+
+In order to install this, all it's need to be done is to copy buildCR script locally, set it as executable, configure FTP settings and set your build devices in devices.txt file.
+To do so run following commands:
+
+```bash
+# Download the script with curl
+$ curl -LJO https://raw.githubusercontent.com/crdroid-devices/build_crDroid/master/buildCR
+# Make script executable
+$ chmod +x buildCR
+# Create devices.txt 
+$ echo > devices.txt
+```
+
+### Configuration
+
+We now need to configure buildCR and devices codenames that we want to build for.
+
+Open buildCR and change according to your needs the following lines.
+
+```bash
+#   << Start configuration >>
+#crDroid_path is the location of build environment root path aka {ANDROID_BUILD_TOP}
+crDroid_path=~/Desktop/CR
+#set how much RAM is used by JACK if building with (can't be bigger then total RAM on your system)
+RAM=10
+#set if you want to save changelog file to script_path (from where the script runs) at end of build (useful to add changelog info to forums and so on... easy to find)
+copy_changelog=true
+#FTP config
+upload_build=true
+FTP_hostname="ftp://domain.tld"
+FTP_username=username
+FTP_password=password
+#   << End configuration >>
+```
+
+Now open devices.txt and set your build devices like in example below.
+
+    <device codename>,<FTP upload path>
+    herolte,auto/SamsungGalaxyS7S7edgeSMG93XX/173942-herolte/
+
+**FTP upload path** - you might need this created by the crDroid staff if you want to use auto AFH import, so contact staff via Hangouts
+
+### Start building
+
+In order to start building, issue the following command
+
+    $ ./buildCR
