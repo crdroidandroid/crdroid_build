@@ -7,7 +7,7 @@ With proper settings, it's also possible to push to crDroid AFH page automatical
 
 ### How to Install
 
-In order to install this, all it's need to be done is to copy buildCR script locally, set it as executable, configure FTP settings and set your build devices in devices.txt file.
+In order to install this, all it's needed to be done is copy buildCR script locally, set it as executable, configure FTP settings and set your build devices in devices.txt file.
 To do so run following commands:
 
 ```bash

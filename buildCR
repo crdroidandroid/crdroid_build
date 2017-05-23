@@ -28,7 +28,7 @@ script_path="`dirname \"$0\"`"              # relative
 script_path="`( cd \"$script_path\" && pwd )`"  # absolutized and normalized
 if [ -z "$script_path" ] ; then
     # error; for some reason, the path is not accessible
-    echo "${red}Can no read run path"
+    echo "${red}Can not read run path"
     echo "Build can not continue"${txtrst}
     exit 1  # fail
 fi
@@ -36,9 +36,17 @@ fi
 #check if devices,txt exists
 devices=$script_path/devices.txt
 if [ ! -f $devices ]; then
-    echo "${red}File devices.txt does not exist"
-    echo "Can not continue"${txtrst}
+    echo "${red}devices.txt missing"
+    echo "Build can not continue"${txtrst}
     exit 1  # fail
+fi
+
+#check if synced already
+crdroid_synced=$crDroid_path/vendor/cm/config/crdroid.mk
+if [ ! -f $crdroid_synced ]; then
+    echo "${ylw}Detected missing first sync... atempting first time sync..."${txtrst}
+    cd $crDroid_path
+    repo sync -f --force-sync --no-clone-bundle
 fi
 
 #detect android version based on crdroid.mk
@@ -57,7 +65,7 @@ IFS=" "; declare -a crDroid_version=($*)
 crDroid=${crDroid_version[2]} 
 
 echo "==========================================="
-echo "${cya}Initiate build script - v2.1 by Gabriel Lup"${txtrst}
+echo "${cya}Initiate build script - v2.2 by Gabriel Lup"${txtrst}
 echo "-------------------------------------------"
 echo "Script path set to: "${grn}$script_path${txtrst}
 echo "crDroid path set to: "${grn}$crDroid_path${txtrst}
