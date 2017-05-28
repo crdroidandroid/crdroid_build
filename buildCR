@@ -5,7 +5,7 @@
 #crDroid_path is the location of build environment root path aka {ANDROID_BUILD_TOP}
 crDroid_path=~/Desktop/CR
 #set how much RAM is used by JACK if building with
-RAM=10
+RAM=12
 #set if you want to save changelog file to script_path (from where the script runs) at end of build (useful to add changelog info to forums and so on... easy to find)
 copy_changelog=true
 #FTP config
@@ -21,7 +21,12 @@ grn=$(tput setaf 2)                         #  green
 ylw=$(tput setaf 3)                         #  yellow
 blu=$(tput setaf 4)                         #  blue
 cya=$(tput rev)$(tput bold)$(tput setaf 6)  #  bold cyan reversed
+ylr=$(tput rev)$(tput bold)$(tput setaf 3)  #  bold yellow reversed
 txtrst=$(tput sgr0)                         #  Reset
+
+echo "==========================================="
+echo "${cya}Initiate build script - v2.3 by Gabriel Lup"${txtrst}
+echo "==========================================="
 
 #detect path where the script is running
 script_path="`dirname \"$0\"`"              # relative
@@ -33,48 +38,13 @@ if [ -z "$script_path" ] ; then
     exit 1  # fail
 fi
 
-#check if devices,txt exists
+#check if devices.txt exists
 devices=$script_path/devices.txt
 if [ ! -f $devices ]; then
     echo "${red}devices.txt missing"
     echo "Build can not continue"${txtrst}
     exit 1  # fail
 fi
-
-#check if synced already
-crdroid_synced=$crDroid_path/vendor/cm/config/crdroid.mk
-if [ ! -f $crdroid_synced ]; then
-    echo "${ylw}Detected missing first sync... atempting first time sync..."${txtrst}
-    cd $crDroid_path
-    repo sync -f --force-sync --no-clone-bundle
-fi
-
-#detect android version based on crdroid.mk
-rl2="`sed -n '2p' $crDroid_path/vendor/cm/config/crdroid.mk`"
-set -- "$rl2"
-IFS=" "; declare -a android_major=($*) 
-rl3="`sed -n '3p' $crDroid_path/vendor/cm/config/crdroid.mk`"
-set -- "$rl3"
-IFS=" "; declare -a android_minor=($*) 
-android=${android_major[2]}"."${android_minor[2]}
-
-#detect crDroid version based on crdroid.mk
-rl6="`sed -n '6p' $crDroid_path/vendor/cm/config/crdroid.mk`"
-set -- "$rl6"
-IFS=" "; declare -a crDroid_version=($*)
-crDroid=${crDroid_version[2]} 
-
-echo "==========================================="
-echo "${cya}Initiate build script - v2.2 by Gabriel Lup"${txtrst}
-echo "-------------------------------------------"
-echo "Script path set to: "${grn}$script_path${txtrst}
-echo "crDroid path set to: "${grn}$crDroid_path${txtrst}
-echo "Jack RAM usage set to: "${grn}$RAM"GB RAM"${txtrst}
-echo "Copy changelog to script path at end of build?: "${grn}$copy_changelog${txtrst}
-echo "Upload complete build to FTP?: "${grn}$upload_build${txtrst}
-echo "Trying to compile crDroid "${grn}$crDroid${txtrst}" based on Android "${grn}$android${txtrst}
-echo "==========================================="
-echo ""
 
 #cleanup errors.txt if exists
 errors=$script_path/errors.txt
@@ -86,6 +56,14 @@ fi
 changelog=$script_path/changelog.txt
 if [ -e $changelog ]; then
     rm -f $changelog
+fi
+
+#check if already synced
+crdroid_synced=$crDroid_path/vendor/cm/config/crdroid.mk
+if [ ! -f $crdroid_synced ]; then
+    echo "${ylw}Detected missing first sync... atempting first time sync..."${txtrst}
+    cd $crDroid_path
+    repo sync -f --force-sync --no-clone-bundle
 fi
 
 cd $crDroid_path
@@ -104,6 +82,33 @@ select yn in "Yes" "No"; do
         No ) break;;
     esac
 done
+
+#detect android version based on crdroid.mk
+rl2="`sed -n '2p' $crDroid_path/vendor/cm/config/crdroid.mk`"
+set -- "$rl2"
+IFS=" "; declare -a android_major=($*) 
+rl3="`sed -n '3p' $crDroid_path/vendor/cm/config/crdroid.mk`"
+set -- "$rl3"
+IFS=" "; declare -a android_minor=($*) 
+android=${android_major[2]}"."${android_minor[2]}
+
+#detect crDroid version based on crdroid.mk
+rl6="`sed -n '6p' $crDroid_path/vendor/cm/config/crdroid.mk`"
+set -- "$rl6"
+IFS=" "; declare -a crDroid_version=($*)
+crDroid=${crDroid_version[2]} 
+
+echo "==========================================="
+echo "${ylr}Setting build environment"${txtrst}
+echo "-------------------------------------------"
+echo "Script path set to: "${grn}$script_path${txtrst}
+echo "crDroid path set to: "${grn}$crDroid_path${txtrst}
+echo "Jack RAM usage set to: "${grn}$RAM"GB RAM"${txtrst}
+echo "Copy changelog to script path at end of build?: "${grn}$copy_changelog${txtrst}
+echo "Upload complete build to FTP?: "${grn}$upload_build${txtrst}
+echo "Trying to compile crDroid "${grn}$crDroid${txtrst}" based on Android "${grn}$android${txtrst}
+echo "==========================================="
+echo ""
 
 echo "${ylw}Initiate build for all devices...${txtrst}" #described in devices.txt
 cat $script_path/devices.txt | while read line
