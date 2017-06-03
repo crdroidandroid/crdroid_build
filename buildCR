@@ -25,7 +25,7 @@ ylr=$(tput rev)$(tput bold)$(tput setaf 3)  #  bold yellow reversed
 txtrst=$(tput sgr0)                         #  Reset
 
 echo "==========================================="
-echo "${cya}Initiate build script - v2.3 by Gabriel Lup"${txtrst}
+echo "${cya}Initiate build script - v2.4 by Gabriel Lup"${txtrst}
 echo "==========================================="
 
 #detect path where the script is running
@@ -138,7 +138,10 @@ do
         echo "${grn}Seems compilation is ready!${txtrst}"
         if [ "$upload_build" = true ] ; then
 	        echo "${grn}Uploading new "$device" build to FTP server${txtrst}"
-            curl -T $uploadfile $FTP_hostname/${device_uploadpath[1]} --user $FTP_username:$FTP_password
+            echo "${ylw}Creating folder over FTP if not exist${txtrst}"
+            curl $FTP_hostname/${device_uploadpath[1]}/ --user $FTP_username:$FTP_password --ftp-create-dirs
+            echo "${ylw}Uploading...${txtrst}"
+            curl -T $uploadfile $FTP_hostname/${device_uploadpath[1]}/ --user $FTP_username:$FTP_password
             res=$?
             if test "$res" != "0"; then
                 echo "${red}Upload of build for device $device failed with code $res${txtrst}"
@@ -165,5 +168,4 @@ if [ -e $errors ]; then
 else
     echo "${grn}All devices were built successfully! :)${txtrst}"
 fi
-
 

@@ -30,7 +30,7 @@ Open buildCR and change according to your needs the following lines.
 #crDroid_path is the location of build environment root path aka {ANDROID_BUILD_TOP}
 crDroid_path=~/Desktop/CR
 #set how much RAM is used by JACK if building with (can't be bigger then total RAM on your system)
-RAM=10
+RAM=12
 #set if you want to save changelog file to script_path (from where the script runs) at end of build (useful to add changelog info to forums and so on... easy to find)
 copy_changelog=true
 #FTP config
@@ -44,9 +44,9 @@ FTP_password=password
 Now open devices.txt and set your build devices like in example below.
 
     <device codename>,<FTP upload path>
-    herolte,auto/SamsungGalaxyS7S7edgeSMG93XX/173942-herolte/
+    herolte,auto/SamsungGalaxyS7S7edgeSMG93XX/173942-herolte
 
-**FTP upload path** - you might need this created by the crDroid staff if you want to use auto AFH import, so contact staff via Hangouts
+**FTP upload path** - ask crDroid staff via official Hangouts for this path according to your device (this is useful for auto import to AFH)
 
 ### Start building
 
