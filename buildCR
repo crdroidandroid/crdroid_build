@@ -22,10 +22,11 @@ ylw=$(tput setaf 3)                         #  yellow
 blu=$(tput setaf 4)                         #  blue
 cya=$(tput rev)$(tput bold)$(tput setaf 6)  #  bold cyan reversed
 ylr=$(tput rev)$(tput bold)$(tput setaf 3)  #  bold yellow reversed
+grr=$(tput rev)$(tput bold)$(tput setaf 2)  #  bold green reversed
 txtrst=$(tput sgr0)                         #  Reset
 
 echo "==========================================="
-echo "${cya}Initiate build script - v2.4 by Gabriel Lup"${txtrst}
+echo "${cya}Initiate build script - v2.5 by Gabriel Lup"${txtrst}
 echo "==========================================="
 
 #detect path where the script is running
@@ -116,56 +117,65 @@ do
     IFS=', ' read -r -a device_uploadpath <<< "$line"
     #set device name 
     device=${device_uploadpath[0]}
-    echo "${grn}Now building "${ylw}$device${txtrst}
+    if [[ $device == *"#"* ]]; then
+        device="${device//#}"
+        echo "${red}Found comment (#): Skipping build for ${ylw}$device ${red}${txtrst}"
+        echo "Device $device was skipped..." >> $script_path/errors.txt
+    else
+        echo "${grn}Now building "${ylw}$device${txtrst}
     
-    #set BuildID - aka name of the zip file from OUT folder at the end of the build  
-    BuildID="crDroidAndroid-"$android"-"$(date -d "$D" '+%Y')$(date -d "$D" '+%m')$(date -d "$D" '+%d')"-"$device"-v"$crDroid".zip"
+        #set BuildID - aka name of the zip file from OUT folder at the end of the build  
+        BuildID="crDroidAndroid-"$android"-"$(date -d "$D" '+%Y')$(date -d "$D" '+%m')$(date -d "$D" '+%d')"-"$device"-v"$crDroid".zip"
 
-    #Jack settings
-    echo "Adding "$RAM" RAM to JACK"
-    export JACK_SERVER_VM_ARGUMENTS="-Dfile.encoding=UTF-8 -XX:+TieredCompilation -Xmx"$RAM"g"
-    ./prebuilts/sdk/tools/jack-admin kill-server
-    ./prebuilts/sdk/tools/jack-admin start-server
+        #Jack settings
+        echo "Adding "$RAM" RAM to JACK"
+        export JACK_SERVER_VM_ARGUMENTS="-Dfile.encoding=UTF-8 -XX:+TieredCompilation -Xmx"$RAM"g"
+        ./prebuilts/sdk/tools/jack-admin kill-server
+        ./prebuilts/sdk/tools/jack-admin start-server
     
-    #initiate build script and start actual build
-    . build/envsetup.sh
-    brunch $device
+        #initiate build script and start actual build
+        . build/envsetup.sh
+        brunch $device
 
-    #define upload file path
-    uploadfile=$crDroid_path/out/target/product/$device/$BuildID
-    echo "Checking build result status..."
-    if [ -e "$uploadfile" ]; then
-        echo "${grn}Seems compilation is ready!${txtrst}"
-        if [ "$upload_build" = true ] ; then
-	        echo "${grn}Uploading new "$device" build to FTP server${txtrst}"
-            echo "${ylw}Creating folder over FTP if not exist${txtrst}"
-            curl $FTP_hostname/${device_uploadpath[1]}/ --user $FTP_username:$FTP_password --ftp-create-dirs
-            echo "${ylw}Uploading...${txtrst}"
-            curl -T $uploadfile $FTP_hostname/${device_uploadpath[1]}/ --user $FTP_username:$FTP_password
-            res=$?
-            if test "$res" != "0"; then
-                echo "${red}Upload of build for device $device failed with code $res${txtrst}"
-                echo "Upload of build for device $device failed with code $res" >> $script_path/errors.txt
+        #define upload file path
+        uploadfile=$crDroid_path/out/target/product/$device/$BuildID
+        echo "Checking build result status..."
+        if [ -e "$uploadfile" ]; then
+            echo "${grn}Seems compilation is ready!${txtrst}"
+            if [ "$upload_build" = true ] ; then
+	            echo "${grn}Uploading new "$device" build to FTP server${txtrst}"
+                echo "${ylw}Creating folder over FTP if not exist${txtrst}"
+                curl $FTP_hostname/${device_uploadpath[1]}/ --user $FTP_username:$FTP_password --ftp-create-dirs
+                echo "${ylw}Uploading...${txtrst}"
+                curl -T $uploadfile $FTP_hostname/${device_uploadpath[1]}/ --user $FTP_username:$FTP_password
+                res=$?
+                if test "$res" != "0"; then
+                    echo "${red}Upload of build for device $device failed with code $res${txtrst}"
+                    echo "Upload of build for device $device failed with code $res" >> $script_path/errors.txt
+                fi
             fi
-        fi
 
-        if [ "$copy_changelog" = true ] ; then
-            echo "Copy changelog file to "$script_path
-            cp $crDroid_path/out/target/product/$device/system/etc/Changelog.txt $script_path/changelog.txt	
+            if [ "$copy_changelog" = true ] ; then
+                echo "Copy changelog file to "$script_path
+                cp $crDroid_path/out/target/product/$device/system/etc/Changelog.txt $script_path/changelog.txt	
+            fi
+        else 
+	        echo "${red}Device "$device "did not produce a proper build${txtrst}"
+            echo "Device "$device "did not produce a proper build" >> $script_path/errors.txt
         fi
-    else 
-	    echo "${red}Device "$device "did not produce a proper build${txtrst}"
-        echo "Device "$device "did not produce a proper build" >> $script_path/errors.txt
     fi
 done
 
 if [ -e $errors ]; then
-    echo "${ylw}Build script finished but with following errors :(${txtrst}"
+    echo ""
+    echo ""
+    echo "${ylr}Build script finished with following warnings${txtrst}"
     cat $script_path/errors.txt | while read line
     do
         echo $line
     done
 else
-    echo "${grn}All devices were built successfully! :)${txtrst}"
+    echo ""
+    echo ""
+    echo "${grr}All devices were built successfully! :)${txtrst}"
 fi
-

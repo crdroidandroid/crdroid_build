@@ -42,9 +42,11 @@ FTP_password=password
 ```
 
 Now open devices.txt and set your build devices like in example below.
+You can also comment out with "#" if you want a device to be skipped for building (see 3rd line from example below - commented with #)
 
     <device codename>,<FTP upload path>
     herolte,auto/SamsungGalaxyS7S7edgeSMG93XX/173942-herolte
+    #herolte,auto/SamsungGalaxyS7S7edgeSMG93XX/173942-herolte 
 
 **FTP upload path** - ask crDroid staff via official Hangouts for this path according to your device (this is useful for auto import to AFH)
 
