@@ -6,6 +6,8 @@
 crDroid_path=~/Desktop/CR
 #set how much RAM is used by JACK if building with
 RAM=12
+#CCache size
+ccachesize=30G
 #set if you want to save changelog file to script_path (from where the script runs) at end of build (useful to add changelog info to forums and so on... easy to find)
 copy_changelog=true
 #FTP config
@@ -26,7 +28,7 @@ grr=$(tput rev)$(tput bold)$(tput setaf 2)  #  bold green reversed
 txtrst=$(tput sgr0)                         #  Reset
 
 echo "==========================================="
-echo "${cya}Initiate build script - v2.5 by Gabriel Lup"${txtrst}
+echo "${cya}Initiate build script - v2.6 by Gabriel Lup"${txtrst}
 echo "==========================================="
 
 #detect path where the script is running
@@ -84,6 +86,9 @@ select yn in "Yes" "No"; do
     esac
 done
 
+#Set CCache size
+$crDroid_path/prebuilts/misc/linux-x86/ccache/ccache -M $ccachesize
+
 #detect android version based on crdroid.mk
 rl2="`sed -n '2p' $crDroid_path/vendor/cm/config/crdroid.mk`"
 set -- "$rl2"
@@ -126,7 +131,7 @@ do
     
         #set BuildID - aka name of the zip file from OUT folder at the end of the build  
         BuildID="crDroidAndroid-"$android"-"$(date -d "$D" '+%Y')$(date -d "$D" '+%m')$(date -d "$D" '+%d')"-"$device"-v"$crDroid".zip"
-
+        
         #Jack settings
         echo "Adding "$RAM" RAM to JACK"
         export JACK_SERVER_VM_ARGUMENTS="-Dfile.encoding=UTF-8 -XX:+TieredCompilation -Xmx"$RAM"g"
@@ -179,3 +184,4 @@ else
     echo ""
     echo "${grr}All devices were built successfully! :)${txtrst}"
 fi
+
