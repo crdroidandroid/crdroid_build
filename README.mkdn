@@ -50,7 +50,7 @@ You can also comment out with "#" if you want a device to be skipped for buildin
     herolte,auto/SamsungGalaxyS7S7edgeSMG93XX/173942-herolte
     #herolte,auto/SamsungGalaxyS7S7edgeSMG93XX/173942-herolte 
 
-**FTP upload path** - ask crDroid staff via official Hangouts for this path according to your device (this is useful for auto import to AFH)
+**FTP upload path** - ask crDroid staff via our Telegram channel for this path according to your device (this is useful for auto import to AFH)
 
 ### Start building
 
