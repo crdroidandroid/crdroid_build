@@ -3,7 +3,7 @@
 
 #   << Start configuration >>
 #crDroid_path is the location of build environment root path aka {ANDROID_BUILD_TOP}
-crDroid_path=~/Desktop/CR
+crDroid_path=~/crDroid
 #set how much RAM is used by JACK if building with
 RAM=12
 #CCache size
@@ -28,7 +28,7 @@ grr=$(tput rev)$(tput bold)$(tput setaf 2)  #  bold green reversed
 txtrst=$(tput sgr0)                         #  Reset
 
 echo "==========================================="
-echo "${cya}Initiate build script - v2.6 by Gabriel Lup"${txtrst}
+echo "${cya}Initiate build script - v2.7 by Gabriel Lup"${txtrst}
 echo "==========================================="
 
 #detect path where the script is running
@@ -62,7 +62,7 @@ if [ -e $changelog ]; then
 fi
 
 #check if already synced
-crdroid_synced=$crDroid_path/vendor/cm/config/crdroid.mk
+crdroid_synced=$crDroid_path/vendor/lineage/config/crdroid.mk
 if [ ! -f $crdroid_synced ]; then
     echo "${ylw}Detected missing first sync... atempting first time sync..."${txtrst}
     cd $crDroid_path
@@ -90,16 +90,16 @@ done
 $crDroid_path/prebuilts/misc/linux-x86/ccache/ccache -M $ccachesize
 
 #detect android version based on crdroid.mk
-rl2="`sed -n '2p' $crDroid_path/vendor/cm/config/crdroid.mk`"
+rl2="`sed -n '2p' $crDroid_path/vendor/lineage/config/crdroid.mk`"
 set -- "$rl2"
 IFS=" "; declare -a android_major=($*) 
-rl3="`sed -n '3p' $crDroid_path/vendor/cm/config/crdroid.mk`"
+rl3="`sed -n '3p' $crDroid_path/vendor/lineage/config/crdroid.mk`"
 set -- "$rl3"
 IFS=" "; declare -a android_minor=($*) 
 android=${android_major[2]}"."${android_minor[2]}
 
 #detect crDroid version based on crdroid.mk
-rl6="`sed -n '6p' $crDroid_path/vendor/cm/config/crdroid.mk`"
+rl6="`sed -n '6p' $crDroid_path/vendor/lineage/config/crdroid.mk`"
 set -- "$rl6"
 IFS=" "; declare -a crDroid_version=($*)
 crDroid=${crDroid_version[2]} 
@@ -184,4 +184,3 @@ else
     echo ""
     echo "${grr}All devices were built successfully! :)${txtrst}"
 fi
-
