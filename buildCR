@@ -28,7 +28,7 @@ grr=$(tput rev)$(tput bold)$(tput setaf 2)  #  bold green reversed
 txtrst=$(tput sgr0)                         #  Reset
 
 echo "==========================================="
-echo "${cya}Initiate build script - v2.7 by Gabriel Lup"${txtrst}
+echo "${cya}Initiate build script - v2.7.1 by Gabriel Lup"${txtrst}
 echo "==========================================="
 
 #detect path where the script is running
@@ -130,7 +130,7 @@ do
         echo "${grn}Now building "${ylw}$device${txtrst}
     
         #set BuildID - aka name of the zip file from OUT folder at the end of the build  
-        BuildID="crDroidAndroid-"$android"-"$(date -d "$D" '+%Y')$(date -d "$D" '+%m')$(date -d "$D" '+%d')"-"$device"-v"$crDroid".zip"
+        BuildID="crDroidAndroid-"$android"-"$(date -d "$D" '+%Y')$(date -d "$D" '+%m')$(date -d "$D" '+%d')"-"$device"-v"$crDroid"-BETA.zip"
         
         #Jack settings
         echo "Adding "$RAM" RAM to JACK"
