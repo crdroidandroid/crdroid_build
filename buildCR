@@ -28,7 +28,7 @@ grr=$(tput rev)$(tput bold)$(tput setaf 2)  #  bold green reversed
 txtrst=$(tput sgr0)                         #  Reset
 
 echo "==========================================="
-echo "${cya}Initiate build script - v2.7.1 by Gabriel Lup"${txtrst}
+echo "${cya}Initiate build script - v2.8 by Gabriel Lup (gwolfu@xda)"${txtrst}
 echo "==========================================="
 
 #detect path where the script is running
@@ -49,12 +49,6 @@ if [ ! -f $devices ]; then
     exit 1  # fail
 fi
 
-#cleanup errors.txt if exists
-errors=$script_path/errors.txt
-if [ -e $errors ]; then
-    rm -f $errors
-fi
-
 #cleanup old changelog.txt
 changelog=$script_path/changelog.txt
 if [ -e $changelog ]; then
@@ -67,6 +61,11 @@ if [ ! -f $crdroid_synced ]; then
     echo "${ylw}Detected missing first sync... atempting first time sync..."${txtrst}
     cd $crDroid_path
     repo sync -f --force-sync --no-clone-bundle
+fi
+
+if [ ! -f $crdroid_synced ]; then
+    read -p "${red}Something went wrong :( - Maybe misconfigured script!?"
+    exit
 fi
 
 cd $crDroid_path
@@ -85,6 +84,8 @@ select yn in "Yes" "No"; do
         No ) break;;
     esac
 done
+
+INFO=()
 
 #Set CCache size
 $crDroid_path/prebuilts/misc/linux-x86/ccache/ccache -M $ccachesize
@@ -125,7 +126,7 @@ do
     if [[ $device == *"#"* ]]; then
         device="${device//#}"
         echo "${red}Found comment (#): Skipping build for ${ylw}$device ${red}${txtrst}"
-        echo "Device $device was skipped..." >> $script_path/errors.txt
+        INFO+=('1 '$device' (Reason: instruction to skip found in devices.txt)')
     else
         echo "${grn}Now building "${ylw}$device${txtrst}
     
@@ -156,7 +157,9 @@ do
                 res=$?
                 if test "$res" != "0"; then
                     echo "${red}Upload of build for device $device failed with code $res${txtrst}"
-                    echo "Upload of build for device $device failed with code $res" >> $script_path/errors.txt
+                    INFO+=('1 '$device' (Reason: CURL error no.'$res' ,however compilation appears to be made)')
+                else
+                    INFO+=('2 '$device)
                 fi
             fi
 
@@ -166,21 +169,23 @@ do
             fi
         else 
 	        echo "${red}Device "$device "did not produce a proper build${txtrst}"
-            echo "Device "$device "did not produce a proper build" >> $script_path/errors.txt
+            INFO+=('0 '$device' (Reason: unknown - better run a new build manually)')
         fi
     fi
 done
 
-if [ -e $errors ]; then
-    echo ""
-    echo ""
-    echo "${ylr}Build script finished with following warnings${txtrst}"
-    cat $script_path/errors.txt | while read line
-    do
-        echo $line
-    done
-else
-    echo ""
-    echo ""
-    echo "${grr}All devices were built successfully! :)${txtrst}"
-fi
+echo ${grr}"Script finished with following results"${txtrst}
+for i in "${INFO[@]}"
+do
+	#echo $i
+    if [[ $i == *"0"* ]]; then
+        codename=${i//0}
+        echo "${red}Compilation error for device" $codename${txtrst}
+    elif [[ $i == *"1"* ]]; then
+        codename=${i//1}
+        echo "${ylw}Warning for device" $codename${txtrst}
+    else
+        codename=${i//2}
+        echo "${grn}Device" $codename "compiled and uploaded successfully :)${txtrst}"
+    fi
+done
