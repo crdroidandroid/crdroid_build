@@ -28,7 +28,7 @@ grr=$(tput rev)$(tput bold)$(tput setaf 2)  #  bold green reversed
 txtrst=$(tput sgr0)                         #  Reset
 
 echo "==========================================="
-echo "${cya}Initiate build script - v2.9 by Gabriel Lup (gwolfu@xda)"${txtrst}
+echo "${cya}Initiate build script - v2.9.1 by Gabriel Lup (gwolfu@xda)"${txtrst}
 echo "==========================================="
 
 #detect path where the script is running
@@ -128,7 +128,8 @@ echo "==========================================="
 echo ""
 
 echo "${ylw}Initiate build for all devices...${txtrst}" #described in devices.txt
-cat $script_path/devices.txt | while read line
+file=$script_path/devices.txt
+while IFS= read -r line
 do
     IFS=', ' read -r -a device_uploadpath <<< "$line"
     #set device name 
@@ -152,7 +153,7 @@ do
         #initiate build script and start actual build
         . build/envsetup.sh
         brunch $device
-
+        
         #define upload file path
         uploadfile=$crDroid_path/out/target/product/$device/$BuildID
         echo "Checking build result status..."
@@ -171,6 +172,8 @@ do
                 else
                     INFO+=('2 '$device)
                 fi
+            else
+                INFO+=('2 '$device)
             fi
 
             if [ "$copy_changelog" = true ] ; then
@@ -182,7 +185,7 @@ do
             INFO+=('0 '$device' (Reason: unknown - better run a new build manually)')
         fi
     fi
-done
+done < "$file"
 
 echo ${grr}"Script finished with following results"${txtrst}
 for i in "${INFO[@]}"
