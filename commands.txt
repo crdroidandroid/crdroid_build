@@ -1,0 +1,5 @@
+echo "Apply some commits with repopick (more info on repopick - https://wiki.lineageos.org/usinggerrit-howto.html#retrieving-an-existing-commit)"
+repopick 100123
+echo "Do some other"
+cp 
+ls

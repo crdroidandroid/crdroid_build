@@ -28,7 +28,7 @@ grr=$(tput rev)$(tput bold)$(tput setaf 2)  #  bold green reversed
 txtrst=$(tput sgr0)                         #  Reset
 
 echo "==========================================="
-echo "${cya}Initiate build script - v2.9.1 by Gabriel Lup (gwolfu@xda)"${txtrst}
+echo "${cya}Initiate build script - v2.9.2 by Gabriel Lup (gwolfu@xda)"${txtrst}
 echo "==========================================="
 
 #detect path where the script is running
@@ -85,11 +85,11 @@ select yn in "Yes" "No"; do
     esac
 done
 
-#check if repopick.txt exists and execute commands from it
-repopick_file=$script_path/repopick.txt
-if [ -f $repopick_file ]; then
+#create a commands.txt files and run the commands from it before build initializes 
+commands=$script_path/commands.txt
+if [ -f $commands ]; then
     . build/envsetup.sh
-    cat $script_path/repopick.txt | while read line
+    cat $script_path/commands.txt | while read line
     do
         $line
     done

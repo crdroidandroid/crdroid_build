@@ -52,6 +52,10 @@ You can also comment out with "#" if you want a device to be skipped for buildin
 
 **FTP upload path** - ask crDroid staff via our Telegram channel for this path according to your device (this is useful for auto import to AFH)
 
+### Additional stuff
+If you want to run some additional commands before build starts, for example, repopick some unmerged commits, just create a commands.txt file, and add your stuff there.
+This way the build script picks up the files and executes the commands line by line (see commands.txt example).
+
 ### Start building
 
 In order to start building, issue the following command
