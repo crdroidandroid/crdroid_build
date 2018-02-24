@@ -43,16 +43,23 @@ FTP_password=password
 #   << End configuration >>
 ```
 
-Now open devices.txt and set your build devices like in example below.
-You can also comment out with "#" if you want a device to be skipped for building (see 3rd line from example below - commented with #)
+Now open devices.txt created on setup and set your build devices like in example below.
+
+**FTP upload path** - ask crDroid staff via our Telegram channel for this path according to your device (this is useful for auto import to AFH).
 
     <device codename>,<FTP upload path>
+
+You can also comment out with "#" if you want a device to be skipped for building (please note below is just and example and should not be present in your devices.txt file).
+
+When the script detects # in from of your device codename, it will tell it to skip building for that device.
+
+This is useful if you implemented changes to only one device and want to test out only those changes.
+
     herolte,auto/SamsungGalaxyS7S7edgeSMG93XX/173942-herolte
     #herolte,auto/SamsungGalaxyS7S7edgeSMG93XX/173942-herolte 
 
-**FTP upload path** - ask crDroid staff via our Telegram channel for this path according to your device (this is useful for auto import to AFH)
+### Additional stuff (optional and not mandatory)
 
-### Additional stuff
 If you want to run some additional commands before build starts, for example, repopick some unmerged commits, just create a commands.txt file, and add your stuff there.
 This way the build script picks up the files and executes the commands line by line (see commands.txt example).
 
