@@ -28,7 +28,7 @@ grr=$(tput rev)$(tput bold)$(tput setaf 2)  #  bold green reversed
 txtrst=$(tput sgr0)                         #  Reset
 
 echo "==========================================="
-echo "${cya}Initiate build script - v2.9.2 by Gabriel Lup (gwolfu@xda)"${txtrst}
+echo "${cya}Initiate build script - v3.0 by Gabriel Lup (gwolfu@xda)"${txtrst}
 echo "==========================================="
 
 #detect path where the script is running
@@ -142,7 +142,7 @@ do
         echo "${grn}Now building "${ylw}$device${txtrst}
     
         #set BuildID - aka name of the zip file from OUT folder at the end of the build  
-        BuildID="crDroidAndroid-"$android"-"$(date -d "$D" '+%Y')$(date -d "$D" '+%m')$(date -d "$D" '+%d')"-"$device"-v"$crDroid"-BETA.zip"
+        BuildID="crDroidAndroid-"$android"-"$(date -d "$D" '+%Y')$(date -d "$D" '+%m')$(date -d "$D" '+%d')"-"$device"-v"$crDroid".zip"
         
         #Jack settings
         echo "Adding "$RAM" RAM to JACK"
@@ -160,7 +160,7 @@ do
         if [ -e "$uploadfile" ]; then
             echo "${grn}Seems compilation is ready!${txtrst}"
             if [ "$upload_build" = true ] ; then
-	            echo "${grn}Uploading new "$device" build to FTP server${txtrst}"
+                echo "${grn}Uploading new "$device" build to FTP server${txtrst}"
                 echo "${ylw}Creating folder over FTP if not exist${txtrst}"
                 curl $FTP_hostname/${device_uploadpath[1]}/ --user $FTP_username:$FTP_password --ftp-create-dirs
                 echo "${ylw}Uploading...${txtrst}"
@@ -181,7 +181,7 @@ do
                 cp $crDroid_path/out/target/product/$device/system/etc/Changelog.txt $script_path/changelog.txt	
             fi
         else 
-	        echo "${red}Device "$device "did not produce a proper build${txtrst}"
+            echo "${red}Device "$device "did not produce a proper build${txtrst}"
             INFO+=('0 '$device' (Reason: unknown - better run a new build manually)')
         fi
     fi
