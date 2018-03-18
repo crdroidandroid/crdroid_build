@@ -35,8 +35,6 @@ RAM=12
 ccachesize=30G
 #set if you want to save changelog file to script_path (from where the script runs) at end of build (useful to add changelog info to forums and so on... easy to find)
 copy_changelog=true
-#build_tag -  in case build is BETA/MILESTONE/STABLE (can also be empty) see https://github.com/crdroidandroid/android_vendor_crDroidOTA
-build_tag=""
 #FTP config
 upload_build=true
 FTP_hostname="ftp://domain.tld"

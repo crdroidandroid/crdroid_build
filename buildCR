@@ -10,8 +10,6 @@ RAM=12
 ccachesize=30G
 #set if you want to save changelog file to script_path (from where the script runs) at end of build (useful to add changelog info to forums and so on... easy to find)
 copy_changelog=true
-#build_tag -  in case build is BETA/MILESTONE/STABLE (can also be empty) see https://github.com/crdroidandroid/android_vendor_crdroid/blob/8.1/build/tasks/bacon.mk#L19
-build_tag=""
 #FTP config
 upload_build=true
 FTP_hostname="ftp://domain.tld"
@@ -30,7 +28,7 @@ grr=$(tput rev)$(tput bold)$(tput setaf 2)  #  bold green reversed
 txtrst=$(tput sgr0)                         #  Reset
 
 echo "==========================================="
-echo "${cya}Initiate build script - v3.1 by Gabriel Lup (gwolfu@xda)"${txtrst}
+echo "${cya}Initiate build script - v3.1.1 by Gabriel Lup (gwolfu@xda)"${txtrst}
 echo "==========================================="
 
 #detect path where the script is running
@@ -144,11 +142,7 @@ do
         echo "${grn}Now building "${ylw}$device${txtrst}
     
         #set BuildID - aka name of the zip file from OUT folder at the end of the build
-        if [ -n "$build_tag" ]; then
-            BuildID="crDroidAndroid-"$android"-"$(date -d "$D" '+%Y')$(date -d "$D" '+%m')$(date -d "$D" '+%d')"-"$device"-v"$crDroid"-"$build_tag".zip"
-        else
-            BuildID="crDroidAndroid-"$android"-"$(date -d "$D" '+%Y')$(date -d "$D" '+%m')$(date -d "$D" '+%d')"-"$device"-v"$crDroid".zip"
-        fi
+        BuildID="crDroidAndroid-"$android"-"$(date -d "$D" '+%Y')$(date -d "$D" '+%m')$(date -d "$D" '+%d')"-"$device"-v"$crDroid".zip"
         
         #Jack settings
         echo "Adding "$RAM" RAM to JACK"
