@@ -12,7 +12,7 @@ To do so run following commands:
 
 ```bash
 # Download the script with curl
-$ curl -LJO https://raw.githubusercontent.com/crdroidandroid/build_crDroid/oreo/buildCR
+$ curl -LJO https://raw.githubusercontent.com/crdroidandroid/crdroid_build/8.1/buildCR
 # Make script executable
 $ chmod +x buildCR
 # Create devices.txt 
