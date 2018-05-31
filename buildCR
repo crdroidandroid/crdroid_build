@@ -1,7 +1,7 @@
 #!/bin/bash
 #Build crDroid and optionally upload to FTP for all devices in devices.txt
 
-script_version=3.2
+script_version=3.3
 #   << Start configuration >>
 #crDroid_path is the location of build environment root path aka {ANDROID_BUILD_TOP}
 crDroid_path=~/crDroid
@@ -54,6 +54,19 @@ fi
 changelog=$script_path/changelog.txt
 if [ -e $changelog ]; then
     rm -f $changelog
+fi
+
+#check script updates
+echo "Running update check..."
+url=$(wget -O- -q https://raw.githubusercontent.com/crdroidandroid/crdroid_build/8.1/buildCR)
+array=( $url )
+OTA=$((sed -e 's#.*=\(\)#\1#' <<< ${array[13]}) | sed -r 's/[.]+//g')
+script_version=$(echo $script_version | sed -r 's/[.]+//g')
+if [ "$OTA" -gt "$script_version" ]; then
+    echo "${ylr}A new version of this build script is available on GitHub"
+    echo "Some things may not work properly, so please update asap ${txtrst}"
+else
+    echo "${grr}Seems you are running latest build script version available ㋡${txtrst}"
 fi
 
 #check if already synced
@@ -205,6 +218,6 @@ do
         echo "${ylw}Warning for device" $codename${txtrst}
     else
         codename=${i//2}
-        echo "${grn}Device" $codename "compiled and uploaded successfully :)${txtrst}"
+        echo "${grn}Device" $codename "compiled and uploaded successfully ㋡${txtrst}"
     fi
 done
