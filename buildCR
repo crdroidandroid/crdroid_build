@@ -1,7 +1,7 @@
 #!/bin/bash
 #Build crDroid and optionally upload to FTP for all devices in devices.txt
 
-script_version=3.3
+script_version=3.4
 #   << Start configuration >>
 #crDroid_path is the location of build environment root path aka {ANDROID_BUILD_TOP}
 crDroid_path=~/crDroid
@@ -70,7 +70,7 @@ else
 fi
 
 #check if already synced
-crdroid_synced=$crDroid_path/vendor/lineage/config/main_version.mk
+crdroid_synced=$crDroid_path/vendor/lineage/build/core/main_version.mk
 if [ ! -f $crdroid_synced ]; then
     echo "${ylw}Detected missing first sync... atempting first time sync..."${txtrst}
     cd $crDroid_path
@@ -120,16 +120,16 @@ INFO=()
 $crDroid_path/prebuilts/misc/linux-x86/ccache/ccache -M $ccachesize
 
 #detect android version based on main_version.mk
-rl2="`sed -n '2p' $crDroid_path/vendor/lineage/config/main_version.mk`"
+rl2="`sed -n '2p' $crDroid_path/vendor/lineage/build/core/main_version.mk`"
 set -- "$rl2"
 IFS=" "; declare -a android_major=($*) 
-rl3="`sed -n '3p' $crDroid_path/vendor/lineage/config/main_version.mk`"
+rl3="`sed -n '3p' $crDroid_path/vendor/lineage/build/core/main_version.mk`"
 set -- "$rl3"
 IFS=" "; declare -a android_minor=($*) 
 android=${android_major[2]}"."${android_minor[2]}
 
 #detect crDroid version based on main_version.mk
-rl6="`sed -n '6p' $crDroid_path/vendor/lineage/config/main_version.mk`"
+rl6="`sed -n '6p' $crDroid_path/vendor/lineage/build/core/main_version.mk`"
 set -- "$rl6"
 IFS=" "; declare -a crDroid_version=($*)
 crDroid=${crDroid_version[2]} 
