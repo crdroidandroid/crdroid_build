@@ -2,61 +2,59 @@
 
 ### Description ###
 
-This bash script is used to build crDroid and upload via FTP.
+This bash script is used to build crDroid and upload via FTP.  
 With proper settings, it's also possible to push to crDroid AFH page automatically.
 
 ### How to Install
 
-In order to install this, all it's needed to be done is copy buildCR script locally, set it as executable, configure FTP settings and set your build devices in devices.txt file.
+In order to install this, all it's needed to be done is copy build script locally, set it as executable and configure it with built-in wizard.  
 To do so run following commands:
 
 ```bash
 # Download the script with curl
-$ curl -LJO https://raw.githubusercontent.com/crdroidandroid/crdroid_build/8.1/buildCR
+$ curl -LJO https://raw.githubusercontent.com/crdroidandroid/crdroid_build/8.1/build
 # Make script executable
-$ chmod +x buildCR
-# Create devices.txt 
-$ echo > devices.txt
+$ chmod +x build
+# run the script
+$ ./build
 ```
 
 ### Configuration
 
-We now need to configure buildCR and devices codenames that we want to build for.
-
-Open buildCR and change according to your needs the following lines.
+We now need to configure build and devices codenames that we want to build for.  
+For that just **./build** and follow the on-screen instructions.
 
 ```bash
-#   << Start configuration >>
-#crDroid_path is the location of build environment root path aka {ANDROID_BUILD_TOP}
-crDroid_path=~/Desktop/CR
-#set how much RAM is used by JACK if building with
-RAM=12
-#CCache size
-ccachesize=30G
-#set if you want to save changelog file to script_path (from where the script runs) at end of build (useful to add changelog info to forums and so on... easy to find)
-copy_changelog=true
-#FTP config
-upload_build=true
-FTP_hostname="ftp://domain.tld"
-FTP_username=username
-FTP_password=password
-#   << End configuration >>
+$ ./build
+$ Please enter the path where crDroid folder is located (full path ex:/home/<user>/crDroid)
+$ /home/gwolf2u/crDroid
+$ How much RAM can JACK use for compiling? (numeric value ex: 16)
+$ 16
+$ How much space (in GB) can be used to ccache? (numeric value ex: 30)
+$ 30
+$ Copy changelog to script location at end of compilation?
+$ 1 or 2 (Yes/No)
+$ Upload compilation to FTP at end of build?
+$ 1 or 2 (Yes/No)
+$ Enter FTP hostname (ex: uploads.androidfilehost.com):
+$ uploads.androidfilehost.com
+$ Enter FTP username:
+$ gwolf2u
+$ Enter FTP password:
+$ myultrasecurepassword
 ```
 
-Now open devices.txt created on setup and set your build devices like in example below.
+Now as you just set your configuration, next step would be to add device to build script.  
+Running **./build add** will prompt you to enter your device information.  
+
+```bash
+$ ./build add
+$ Add a new device:
+$ Format: <device codename>,<FTP upload path>
+$ mako,auto/Nexus4/crDroid
+```
 
 **FTP upload path** - ask crDroid staff via our Telegram channel for this path according to your device (this is useful for auto import to AFH).
-
-    <device codename>,<FTP upload path>
-
-You can also comment out with "#" if you want a device to be skipped for building (please note below is just and example and should not be present in your devices.txt file).
-
-When the script detects # in from of your device codename, it will tell it to skip building for that device.
-
-This is useful if you implemented changes to only one device and want to test out only those changes.
-
-    herolte,auto/SamsungGalaxyS7S7edgeSMG93XX/173942-herolte
-    #herolte,auto/SamsungGalaxyS7S7edgeSMG93XX/173942-herolte 
 
 ### Additional stuff (optional and not mandatory)
 
@@ -67,4 +65,20 @@ This way the build script picks up the files and executes the commands line by l
 
 In order to start building, issue the following command
 
-    $ ./buildCR
+    $ ./build
+
+### Help
+
+Issue **./build help** for a list of helpfull commands
+
+```bash
+This build script is used to be able to build crDroid and upload the builds over FTP
+Usage: ./build [OPTION]
+
+Commands supported:
+add       - adds a device to be built
+remove    - removes a device from build list
+list      - lists all devices that are configured to be built
+clean     - cleans up the configuration
+clear     - clears up all the devices on build list
+```
