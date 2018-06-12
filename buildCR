@@ -1,7 +1,7 @@
 #!/bin/bash
 #Build crDroid and optionally upload to FTP for all devices in devices.txt
 
-script_version=4.0.0
+script_version=4.0.1
 #   << Start configuration >>
 #crDroid_path is the location of build environment root path aka {ANDROID_BUILD_TOP}
 crDroid_path=~/crDroid

@@ -1,7 +1,7 @@
 #!/bin/bash
 # Build crDroid and optionally upload to FTP
 # Author: Gwolf2u (gwolf2u@xda)
-script_version=4.0.0
+script_version=4.0.1
 
 # Specify colors utilized in the terminal
 red=$(tput setaf 1)                         #  red
@@ -124,7 +124,7 @@ if [ ! -f $config ]; then
     echo "copy_changelog="$set_copy_changelog >> config
     echo "#FTP config" >> config
     echo "upload_build="$set_upload_build >> config
-    echo "FTP_hostname=\"ftp://$set_FTP_hostname\"" >> config
+    echo "FTP_hostname=ftp://$set_FTP_hostname" >> config
     echo "FTP_username="$set_FTP_username >> config
     echo "FTP_password="$set_FTP_password >> config
     echo "#   << End configuration >>" >> config
@@ -158,6 +158,12 @@ upload_build=$(sed -n '11p' < config | cut -d "=" -f 2)
 FTP_hostname=$(sed -n '12p' < config | cut -d "=" -f 2)
 FTP_username=$(sed -n '13p' < config | cut -d "=" -f 2)
 FTP_password=$(sed -n '14p' < config | cut -d "=" -f 2)
+
+if [[ $FTP_hostname = *"\""* ]]; then
+    echo "Detected wrong configuration file caused by a bug in build script v4.0.0"
+    echo "Please run ${red}./build clean${txtrst} to reconfigure build script"
+    exit 0
+fi
 
 #legacy devices.txt to devices
 devicestxt=$script_path/devices.txt
