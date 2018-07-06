@@ -1,7 +1,7 @@
 #!/bin/bash
 # Build crDroid and optionally upload to FTP
 # Author: Gwolf2u (gwolf2u@xda)
-script_version=4.0.1
+script_version=4.0.2
 
 # Specify colors utilized in the terminal
 red=$(tput setaf 1)                         #  red
@@ -201,6 +201,8 @@ if [ ! -f $crdroid_synced ]; then
     exit
 fi
 
+export LC_ALL=C
+
 cd $crDroid_path
 echo "${blu}Run sync?${txtrst}"
 select yn in "Yes" "No"; do
@@ -341,3 +343,4 @@ do
         echo "${grn}Device" $codename "compiled and uploaded successfully ㋡${txtrst}"
     fi
 done
+
