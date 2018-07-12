@@ -1,7 +1,7 @@
 #!/bin/bash
 # Build crDroid and optionally upload to FTP
 # Author: Gwolf2u (gwolf2u@xda)
-script_version=4.0.2
+script_version=4.0.3
 
 # Specify colors utilized in the terminal
 red=$(tput setaf 1)                         #  red
@@ -344,3 +344,4 @@ do
     fi
 done
 
+read -p "Press enter to exit"
