@@ -1,7 +1,7 @@
 #!/bin/bash
 # Build crDroid and optionally upload to FTP
 # Author: Gwolf2u (gwolf2u@xda)
-script_version=4.0.4
+script_version=4.0.5
 
 # Specify colors utilized in the terminal
 red=$(tput setaf 1)                         #  red
@@ -11,6 +11,7 @@ blu=$(tput setaf 4)                         #  blue
 cya=$(tput rev)$(tput bold)$(tput setaf 6)  #  bold cyan reversed
 ylr=$(tput rev)$(tput bold)$(tput setaf 3)  #  bold yellow reversed
 grr=$(tput rev)$(tput bold)$(tput setaf 2)  #  bold green reversed
+rer=$(tput rev)$(tput bold)$(tput setaf 1)  #  bold red reversed
 txtrst=$(tput sgr0)                         #  Reset
 
 #detect path where the script is running
@@ -144,7 +145,10 @@ rm -f check
 script_version=$(echo $script_version | sed -r 's/[.]+//g')
 if [ "$online_version" -gt "$script_version" ]; then
     echo "${ylr}A new version of this build script is available on GitHub"
-    echo "Some things may not work properly, so please update asap ${txtrst}"
+    echo "Run below command to update before re-attempting to run again"
+    echo "${rer}curl -LJO https://raw.githubusercontent.com/crdroidandroid/crdroid_build/8.1/build${txtrst}"
+    read -p "${ylr}Press enter to exit${txtrst}"
+    exit 0
 else
     echo "${grr}Seems you are running latest build script version available ㋡${txtrst}"
 fi
@@ -216,6 +220,10 @@ done
 
 echo "${blu}For how many days you want changelog to be generated?${txtrst}"
 read days
+until [[ $days =~ ^-?[0-9]+$ ]]; do
+    echo "Invalid input - only numbers are allowed"
+    read days
+done
 export changelog_days=$days
 echo "${grn}Roger... $days days will be set for changelog generation${txtrst}"
 
