@@ -1,7 +1,7 @@
 #!/bin/bash
 # Build crDroid and optionally upload to FTP
 # Author: Gwolf2u (gwolf2u@xda)
-script_version=4.0.3
+script_version=4.0.4
 
 # Specify colors utilized in the terminal
 red=$(tput setaf 1)                         #  red
@@ -187,6 +187,8 @@ changelog=$script_path/changelog.txt
 if [ -e $changelog ]; then
     rm -f $changelog
 fi
+
+PATH=~/bin:$PATH
 
 #check if already synced
 crdroid_synced=$crDroid_path/vendor/lineage/build/core/main_version.mk
