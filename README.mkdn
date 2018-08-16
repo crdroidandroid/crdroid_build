@@ -8,11 +8,11 @@ With proper settings, it's also possible to push to crDroid AFH page automatical
 ### How to Install
 
 In order to install this, all it's needed to be done is copy build script locally, set it as executable and configure it with built-in wizard.  
-To do so run following commands:
+To do so run following commands in terminal:
 
 ```bash
 # Download the script with curl
-$ curl -LJO https://raw.githubusercontent.com/crdroidandroid/crdroid_build/8.1/build
+$ curl -LJO https://raw.githubusercontent.com/crdroidandroid/crdroid_build/9.0/build
 # Make script executable
 $ chmod +x build
 # run the script
@@ -21,8 +21,8 @@ $ ./build
 
 ### Configuration
 
-We now need to configure build and devices codenames that we want to build for.  
-For that just **./build** and follow the on-screen instructions.
+You now need to configure build script and add device codenames that you want to build for.  
+For that just issue **./build** in terminal and follow the on-screen instructions.
 
 ```bash
 $ ./build
@@ -44,7 +44,7 @@ $ Enter FTP password:
 $ myultrasecurepassword
 ```
 
-Now as you just set your configuration, next step would be to add device to build script.  
+Now as you just set your configuration, next step would be to add a devices to initiate build for.  
 Running **./build add** will prompt you to enter your device information.  
 
 ```bash
@@ -63,13 +63,13 @@ This way the build script picks up the files and executes the commands line by l
 
 ### Start building
 
-In order to start building, issue the following command
+In order to start building, issue the following command in terminal
 
     $ ./build
 
 ### Help
 
-Issue **./build help** for a list of helpfull commands
+Issue **./build help** in terminal for a list of helpfull commands
 
 ```bash
 This build script is used to be able to build crDroid and upload the builds over FTP
