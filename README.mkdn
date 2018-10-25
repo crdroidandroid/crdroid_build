@@ -1,5 +1,7 @@
-# crDroid build script #
+![alt text][logo]
 
+ [logo]:https://crdroid.net/images/logo.png "crDroid Android Build Script" 
+ 
 ### Description ###
 
 This bash script is used to build crDroid and upload via FTP.  
