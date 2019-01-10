@@ -2,8 +2,8 @@
 
 ### Description ###
 
-This bash script is used to build crDroid and upload via FTP.  
-With proper settings, it's also possible to push to crDroid AFH page automatically.
+This bash script is used to build crDroid and upload via SFTP.  
+With proper settings, it's also possible to push to crDroid SourceForge page automatically.
 
 ### How to Install
 
@@ -19,6 +19,8 @@ $ chmod +x build
 $ ./build
 ```
 
+Tool uses LFTP (https://lftp.yar.ru) to transfer files to remote server.
+
 ### Configuration
 
 You now need to configure build script and add device codenames that you want to build for.  
@@ -27,20 +29,18 @@ For that just issue **./build** in terminal and follow the on-screen instruction
 ```bash
 $ ./build
 $ Please enter the path where crDroid folder is located (full path ex:/home/<user>/crDroid)
-$ /home/gwolf2u/crDroid
+$ /home/user/crDroid
 $ How much RAM can JACK use for compiling? (numeric value ex: 16)
 $ 16
 $ How much space (in GB) can be used to ccache? (numeric value ex: 30)
 $ 30
-$ Copy changelog to script location at end of compilation?
+$ Upload compilation to remote server at end of build?
 $ 1 or 2 (Yes/No)
-$ Upload compilation to FTP at end of build?
-$ 1 or 2 (Yes/No)
-$ Enter FTP hostname (ex: uploads.androidfilehost.com):
-$ uploads.androidfilehost.com
-$ Enter FTP username:
-$ gwolf2u
-$ Enter FTP password:
+$ Enter remote hostname (ex: web.sourceforge.net):
+$ web.sourceforge.net
+$ Enter remote username::
+$ user
+$ Enter remote password:
 $ myultrasecurepassword
 ```
 
@@ -50,11 +50,10 @@ Running **./build add** will prompt you to enter your device information.
 ```bash
 $ ./build add
 $ Add a new device:
-$ Format: <device codename>,<FTP upload path>
-$ mako,auto/Nexus4/crDroid
+$ Format: <device codename>,<remote upload path>
+$ dumpling,/home/pfs/project/crdroid/dumpling
 ```
 
-**FTP upload path** - ask crDroid staff via our Telegram channel for this path according to your device (this is useful for auto import to AFH).
 
 ### Additional stuff (optional and not mandatory)
 
@@ -72,7 +71,7 @@ In order to start building, issue the following command in terminal
 Issue **./build help** in terminal for a list of helpfull commands
 
 ```bash
-This build script is used to be able to build crDroid and upload the builds over FTP
+This build script is used to be able to build crDroid and upload the builds to remote server
 Usage: ./build [OPTION]
 
 Commands supported:
