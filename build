@@ -1,7 +1,7 @@
 #!/bin/bash
 # Build crDroid and optionally upload to remote server
 # Author: Gwolf2u (gwolfu@xda)
-script_version=6.0.0
+script_version=6.0.1
 
 # Specify colors utilized in the terminal
 red=$(tput setaf 1)                         #  red
@@ -212,6 +212,17 @@ if [ -f $commands ]; then
     done
 fi
 
+function checkupload()
+{
+    testval=$(lftp sftp://$1:$2@$3 -e "set sftp:auto-confirm yes; cd $4 && ls -l | grep $5; bye")
+    if [ -z "$testval" ]
+    then
+        return 1
+    else
+        return 0
+    fi
+}
+
 #Set CCache size
 export USE_CCACHE=1
 $crDroid_path/prebuilts/misc/linux-x86/ccache/ccache -M $ccachesize
@@ -274,8 +285,15 @@ do
             echo "${grn}Seems compilation is ready for $device${txtrst}"
             if [ "$upload_build" = true ] ; then
                 echo "${grn}Uploading new $device build to $remote_hostname${txtrst}"
-				lftp sftp://$remote_username:$remote_password@$remote_hostname -e "cd ${device_uploadpath[1]}; put $uploadfile; bye"
-                INFO+=('2 '$device)
+                lftp sftp://$remote_username:$remote_password@$remote_hostname -e "set sftp:auto-confirm yes; mkdir -f ${device_uploadpath[1]}; cd ${device_uploadpath[1]}; put $uploadfile; bye"
+                echo "${grn}Checking if upload was pushed to host...${txtrst}"
+                if checkupload $remote_username $remote_password $remote_hostname ${device_uploadpath[1]} $BuildID; then
+                    echo "${grn}We go on now as all seems fine${txtrst}"
+                    INFO+=('2 '$device)
+                else
+                    echo "${red}Failed to upload${txtrst}"
+                    INFO+=('1 '$device' (Reason: Upload failed, however compilation appears to be made just fine)')
+                fi
 			fi
 		else 
 			echo "${red}Device "$device "did not produce a proper build${txtrst}"
