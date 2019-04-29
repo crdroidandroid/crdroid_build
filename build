@@ -1,7 +1,7 @@
 #!/bin/bash
 # Build crDroid and optionally upload to remote server
 # Author: Gwolf2u (gwolfu@xda)
-script_version=6.0.1
+script_version=6.0.2
 
 # Specify colors utilized in the terminal
 red=$(tput setaf 1)                         #  red
@@ -294,6 +294,8 @@ do
                     echo "${red}Failed to upload${txtrst}"
                     INFO+=('1 '$device' (Reason: Upload failed, however compilation appears to be made just fine)')
                 fi
+            else
+                INFO+=('3 '$device)
 			fi
 		else 
 			echo "${red}Device "$device "did not produce a proper build${txtrst}"
@@ -312,9 +314,12 @@ do
     elif [[ $i == *"1"* ]]; then
         codename=${i//1}
         echo "${ylw}Warning for device" $codename${txtrst}
-    else
+    elif [[ $i == *"2"* ]]; then
         codename=${i//2}
         echo "${grn}Device" $codename "compiled and uploaded successfully ㋡${txtrst}"
+    else
+        codename=${i//3}
+        echo "${grn}Device" $codename "compiled successfully ㋡ (consider uploading build?)${txtrst}"
     fi
 done
 
