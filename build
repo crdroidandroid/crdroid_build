@@ -1,7 +1,7 @@
 #!/bin/bash
 # Build crDroid and optionally upload to remote server
 # Author: Gwolf2u (gwolfu@xda)
-script_version=6.0.3
+script_version=6.0.4
 
 # Specify colors utilized in the terminal
 red=$(tput setaf 1)                         #  red
@@ -38,35 +38,35 @@ case $arg in
         echo "Add a new device:"
         echo "Format: <device codename>,<remote upload path>"
         read newdevice
-        echo $newdevice >> devices
+        echo $newdevice >> devices.conf
         echo "Added"
         exit 0 ;;
     "remove" )
-        if [ ! -f devices ]; then
+        if [ ! -f devices.conf ]; then
             echo "There are no devices saved"
             exit 0
         fi
         echo "Enter line number to delete"    
-        awk '$0!=""{print NR, $0}' devices
+        awk '$0!=""{print NR, $0}' devices.conf
         read delline
-        sed -i $delline'd' devices
+        sed -i $delline'd' devices.conf
         echo "Deleted"
         exit 0 ;;
     "list" )
-        if [ ! -f devices ]; then
+        if [ ! -f devices.conf ]; then
             echo "There are no devices saved"
             exit 0
         fi
         echo "Listing all devices:"
-        cat $script_path"/devices"
+        cat $script_path"/devices.conf"
         exit 0 ;;
     "clean" )
         echo "Cleaned up configuration"
-        rm -f $script_path"/config"
+        rm -f $script_path"/config.conf"
         exit 0 ;;
     "clear" )
         echo "Cleaned up all devices"
-        rm -f $script_path"/devices"
+        rm -f $script_path"/devices.conf"
         exit 0 ;;
     "help" )
         echo "This build script is used to be able to build crDroid and upload the builds to remote server"
@@ -103,7 +103,16 @@ else
     echo "${grr}Seems you are running latest build script version available ㋡${txtrst}"
 fi
 
-config=$script_path"/config"
+#migrate to new config.conf
+old_config=$script_path"/config"
+config=$script_path"/config.conf"
+if [ -f $old_config ]; then
+    echo ${ylr}"Migrating to new config.conf from conf"${txtrst}
+    mv $old_config $config
+    sed -i 's/config_version=1/config_version=2/g' $config
+    sleep 1s
+fi
+
 if [ ! -f $config ]; then
     echo "Configuration file is missing"
     echo "Creating..."
@@ -131,7 +140,7 @@ if [ ! -f $config ]; then
     fi
 
     #create config file
-	echo "config_version=1" >> config
+	echo "config_version=2" >> config
     echo "crDroid_path="$set_crDroid_path >> config
     echo "RAM="$set_RAM >> config
     echo "ccachesize="$set_ccachesize"G" >> config
@@ -139,21 +148,28 @@ if [ ! -f $config ]; then
     echo "remote_hostname="$set_remote_hostname >> config
     echo "remote_username="$set_remote_username >> config
     echo "remote_password="$set_remote_password >> config
-    echo "${grn}Successfully created configuration file at ${ylw}$script_path/config${txtrst}"
+    echo "${grn}Successfully created configuration file at ${ylw}$script_path/config.conf${txtrst}"
     echo "Please run \"${grn}./build add${txtrst}\" to add new devices for build script"
     echo "For a list of availble commands, run \"${grn}./build help${txtrst}\""
     exit 0
 fi
 
 #read configuration
-source config
-if [[ -z ${config_version+x} ]] || (( "$config_version" < "1" )); then
+source config.conf
+if [[ -z ${config_version+x} ]] || (( "$config_version" < "2" )); then
 	echo "${red}Configuration file is outdated. Please run ${ylw}./build clean ${red}followed by ${ylw}./build ${red}to regenerate it"
 	exit 1
 fi
 
-#check if devices exists
-devices=$script_path/devices
+#migrate to new devices.conf
+old_devices=$script_path"/devices"
+devices=$script_path"/devices.conf"
+if [ -f $old_devices ]; then
+    echo ${ylr}"Migrating to new devices.conf from devices"${txtrst}
+    mv $old_devices $devices
+    sleep 1s
+fi
+
 if [ ! -f $devices ]; then
     echo "${red}There are no devices configured to be built"
     echo "Run \"./build add\" to add a new device"${txtrst}
@@ -254,7 +270,7 @@ echo "==========================================="
 echo ""
 
 echo "${ylw}Initiate build for all devices...${txtrst}"
-file=$script_path/devices
+file=$devices
 while IFS= read -r line
 do
     IFS=', ' read -r -a device_uploadpath <<< "$line"
