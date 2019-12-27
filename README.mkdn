@@ -2,7 +2,7 @@
 
 ### Description ###
 
-This bash script is used to build crDroid and upload via SFTP.  
+This bash script is used to build crDroid and upload via FTP.  
 With proper settings, it's also possible to push to crDroid SourceForge page automatically.
 
 ### How to Install
@@ -19,8 +19,6 @@ $ chmod +x build
 $ ./build
 ```
 
-Tool uses LFTP (https://lftp.yar.ru) to transfer files to remote server.
-
 ### Configuration
 
 You now need to configure build script and add device codenames that you want to build for.  
@@ -30,14 +28,10 @@ For that just issue **./build** in terminal and follow the on-screen instruction
 $ ./build
 $ Please enter the path where crDroid folder is located (full path ex:/home/<user>/crDroid)
 $ /home/user/crDroid
-$ How much RAM can JACK use for compiling? (numeric value ex: 16)
-$ 16
-$ How much space (in GB) can be used to ccache? (numeric value ex: 30)
-$ 30
 $ Upload compilation to remote server at end of build?
 $ 1 or 2 (Yes/No)
-$ Enter remote hostname (ex: web.sourceforge.net):
-$ web.sourceforge.net
+$ Enter remote hostname (ex: upme.crdroid.net):
+$ upme.crdroid.net
 $ Enter remote username::
 $ user
 $ Enter remote password:
@@ -51,7 +45,7 @@ Running **./build add** will prompt you to enter your device information.
 $ ./build add
 $ Add a new device:
 $ Format: <device codename>,<remote upload path>
-$ dumpling,/home/pfs/project/crdroid/dumpling
+$ guacamole,/files/guacamole/6.x
 ```
 
 
