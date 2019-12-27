@@ -251,7 +251,7 @@ do
             echo "${grn}Seems compilation is ready for $device${txtrst}"
             if [ "$upload_build" = true ] ; then
                 echo "${grn}Uploading new $device build to $remote_hostname${txtrst}"
-                echo curl --ssl -k -T $uploadfile ftp://$remote_hostname/${device_uploadpath[1]}/ --user $remote_username:$remote_password
+                curl --ssl -k -T $uploadfile ftp://$remote_hostname/${device_uploadpath[1]}/ --user $remote_username:$remote_password
                 INFO+=('2 '$device)
             else
                 INFO+=('3 '$device)
