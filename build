@@ -1,7 +1,7 @@
 #!/bin/bash
 # Build crDroid and optionally upload to remote FTP server
 # Author: Gwolf2u (gwolfu@xda)
-script_version=6.0.5
+script_version=6.0.6
 
 # Specify colors utilized in the terminal
 red=$(tput setaf 1)                         #  red
@@ -163,11 +163,24 @@ export LC_ALL=C
 export USE_CCACHE=true
 export SKIP_ABI_CHECKS=true
 
+function repopicking()
+{
+    #create a repopick.txt file and run after repo sync 
+    picks=$script_path/repopick.txt
+    if [ -f $picks ]; then
+        . build/envsetup.sh
+        cat $picks | while read line
+        do
+            $line
+        done
+    fi
+}
+
 cd $crDroid_path
 echo "${blu}Run sync?${txtrst}"
 select yn in "Yes" "No"; do
     case $yn in
-        Yes ) repo sync --force-sync --no-clone-bundle; break;;
+        Yes ) repo sync --force-sync --no-clone-bundle; repopicking; break;;
         No ) break;;
     esac
 done
@@ -188,16 +201,6 @@ select yn in "Yes" "No"; do
         No ) break;;
     esac
 done
-
-#create a commands.txt files and run the commands from it before build initializes 
-commands=$script_path/commands.txt
-if [ -f $commands ]; then
-    . build/envsetup.sh
-    cat $script_path/commands.txt | while read line
-    do
-        $line
-    done
-fi
 
 #detect android version based on common.mk
 major_check=$(grep -n "PRODUCT_VERSION_MAJOR" $crDroid_path/vendor/lineage/config/common.mk | grep -Eo '^[^:]+')

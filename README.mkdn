@@ -51,8 +51,8 @@ $ guacamole,/files/guacamole/6.x
 
 ### Additional stuff (optional and not mandatory)
 
-If you want to run some additional commands before build starts, for example, repopick some unmerged commits, just create a commands.txt file, and add your stuff there.
-This way the build script picks up the files and executes the commands line by line (see commands.txt example).
+If you want for example to repopick some unmerged commits, just create a repopick.txt file, and add your stuff there.  
+Build script will execute them after repo sync 
 
 ### Start building
 
