@@ -12,7 +12,7 @@ To do so run following commands in terminal:
 
 ```bash
 # Download the script with curl
-$ curl -LJO https://raw.githubusercontent.com/crdroidandroid/crdroid_build/10.0/build
+$ curl -LJO https://raw.githubusercontent.com/crdroidandroid/crdroid_build/11.0/build
 # Make script executable
 $ chmod +x build
 # run the script
