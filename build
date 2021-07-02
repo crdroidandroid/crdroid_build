@@ -1,7 +1,7 @@
 #!/bin/bash
 # Build crDroid and optionally upload to remote FTP server
 # Author: Gwolf2u (gwolfu@xda)
-script_version=6.0.7
+script_version=6.0.8
 
 # Specify colors utilized in the terminal
 red=$(tput setaf 1)                         #  red
@@ -152,7 +152,7 @@ crdroid_synced=$crDroid_path/vendor/lineage/config/common.mk
 if [ ! -f $crdroid_synced ]; then
     echo "${ylw}Detected missing first sync... atempting first time sync..."${txtrst}
     cd $crDroid_path
-    repo sync --force-sync --no-clone-bundle
+    repo sync --force-sync --no-clone-bundle -j$(nproc)
 fi
 
 if [ ! -f $crdroid_synced ]; then
