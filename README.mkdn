@@ -44,8 +44,8 @@ Running **./build add** will prompt you to enter your device information.
 ```bash
 $ ./build add
 $ Add a new device:
-$ Format: <device codename>,<remote upload path>
-$ guacamole,/files/guacamole/6.x
+$ Format: <device codename>,<build type>,<remote upload path>
+$ guacamole,user,/files/guacamole/7.x
 ```
 
 

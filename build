@@ -1,7 +1,7 @@
 #!/bin/bash
 # Build crDroid and optionally upload to remote FTP server
 # Author: Gwolf2u (gwolfu@xda)
-script_version=6.0.8
+script_version=7.0.0
 
 # Specify colors utilized in the terminal
 red=$(tput setaf 1)                         #  red
@@ -28,7 +28,7 @@ arg=$1
 case $arg in
     "add" )
         echo "Add a new device:"
-        echo "Format: <device codename>,<remote upload path>"
+        echo "Format: <device codename>,<build type>,<remote upload path>"
         read newdevice
         echo $newdevice >> devices.conf
         echo "Added"
@@ -76,7 +76,7 @@ esac
 clear
 
 echo "==========================================="
-echo "${cya}Initiate build script - v$script_version for crDroid 6.x"${txtrst}
+echo "${cya}Initiate build script - v$script_version for crDroid"${txtrst}
 echo "==========================================="
 
 #check script updates
@@ -235,6 +235,7 @@ do
     IFS=', ' read -r -a device_uploadpath <<< "$line"
     #set device name 
     device=${device_uploadpath[0]}
+    buildtype=${device_uploadpath[1]}
     if [[ $device == *"#"* ]]; then
         device="${device//#}"
         echo "${red}Found comment (#): Skipping build for ${ylw}$device ${red}${txtrst}"
@@ -247,8 +248,9 @@ do
     
         #initiate build script and start actual build
         . build/envsetup.sh
-        brunch $device
-        
+        lunch lineage_$device-$buildtype
+        mka bacon
+
         #define upload file path
         uploadfile=$crDroid_path/out/target/product/$device/$BuildID
         echo "Checking build result status..."
@@ -256,7 +258,7 @@ do
             echo "${grn}Seems compilation is ready for $device${txtrst}"
             if [ "$upload_build" = true ] ; then
                 echo "${grn}Uploading new $device build to $remote_hostname${txtrst}"
-                curl --ssl -k -T $uploadfile ftp://$remote_hostname/${device_uploadpath[1]}/ --user $remote_username:$remote_password
+                curl --ssl -k -T $uploadfile ftp://$remote_hostname/${device_uploadpath[2]}/ --user $remote_username:$remote_password
                 INFO+=('2 '$device)
             else
                 INFO+=('3 '$device)
