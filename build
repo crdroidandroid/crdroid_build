@@ -1,7 +1,7 @@
 #!/bin/bash
 # Build crDroid and optionally upload to remote FTP server
 # Author: Gwolf2u (gwolfu@xda)
-script_version=7.2.0
+script_version=7.2.1
 
 # Specify colors utilized in the terminal
 red=$(tput setaf 1)                         #  red
@@ -247,7 +247,7 @@ do
         #initiate build script and start actual build
         . build/envsetup.sh
         lunch lineage_$device-$buildtype
-        mka bacon
+        m bacon
 
         #define upload file path
         uploadfile=$crDroid_path/out/target/product/$device/$BuildID
