@@ -152,7 +152,7 @@ crdroid_synced=$crDroid_path/vendor/lineage/config/version.mk
 if [ ! -f $crdroid_synced ]; then
     echo "${ylw}Detected missing first sync... atempting first time sync..."${txtrst}
     cd $crDroid_path
-    repo sync --force-sync --no-clone-bundle -j$(nproc)
+    repo sync -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags --prune --current-branch --optimized-fetch
 fi
 
 if [ ! -f $crdroid_synced ]; then
@@ -180,7 +180,7 @@ cd $crDroid_path
 echo "${blu}Run sync?${txtrst}"
 select yn in "Yes" "No"; do
     case $yn in
-        Yes ) repo sync --force-sync --no-clone-bundle -j8; repopicking; break;;
+        Yes ) repo sync -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags --prune --current-branch --optimized-fetch; repopicking; break;;
         No ) break;;
     esac
 done
@@ -256,7 +256,7 @@ do
             echo "${grn}Seems compilation is ready for $device${txtrst}"
             if [ "$upload_build" = true ] ; then
                 echo "${grn}Uploading new $device build to $remote_hostname${txtrst}"
-                curl --ssl -k -T $uploadfile ftp://$remote_hostname/${device_uploadpath[2]}/ --user $remote_username:$remote_password
+                curl --ssl -k -T $uploadfile sftp://$remote_hostname/${device_uploadpath[2]}/ --user $remote_username:$remote_password
                 INFO+=('2 '$device)
             else
                 INFO+=('3 '$device)
