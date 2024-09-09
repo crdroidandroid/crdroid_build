@@ -38,7 +38,7 @@ $ Enter remote password:
 $ myultrasecurepassword
 ```
 
-Now as you just set your configuration, next step would be to add a devices to initiate build for.  
+Now as you just set your configuration, next step would be to add a device to initiate build for.  
 Running **./build add** will prompt you to enter your device information.  
 
 ```bash
@@ -52,7 +52,7 @@ $ guacamole,user,/files/guacamole/7.x
 ### Additional stuff (optional and not mandatory)
 
 If you want for example to repopick some unmerged commits, just create a repopick.txt file, and add your stuff there.  
-Build script will execute them after repo sync 
+Build script will execute them after repo sync.
 
 ### Start building
 
@@ -62,7 +62,7 @@ In order to start building, issue the following command in terminal
 
 ### Help
 
-Issue **./build help** in terminal for a list of helpfull commands
+Issue **./build help** in terminal for a list of helpful commands
 
 ```bash
 This build script is used to be able to build crDroid and upload the builds to remote server
